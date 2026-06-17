@@ -46,7 +46,7 @@ jobs:
           BRIDGE_POLARIS_SERVER_URL: ${{ secrets.POLARIS_SERVER_URL }}
           BRIDGE_POLARIS_ACCESS_TOKEN: ${{ secrets.POLARIS_ACCESS_TOKEN }}
         run: |
-          bridge --stage polaris \
+          bridge \
             --polaris.project.name "vulnerable-demo" \
             --polaris.application.name "vulnerable-demo-app" \
             --detect.tools=SIGNATURE_SCAN \
