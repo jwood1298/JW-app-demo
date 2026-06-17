@@ -10,43 +10,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # -----------------------------
+      # STEP 1: Checkout code
+      # -----------------------------
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # -----------------------------
+      # STEP 2: Setup Python
+      # -----------------------------
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
+      # -----------------------------
+      # STEP 3: Install dependencies
+      # -----------------------------
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # ✅ SCA scan (dependency vulnerabilities)
-      - name: Run Safety
+      # -----------------------------
+      # STEP 4: Install Bridge CLI
+      # -----------------------------
+      - name: Install Bridge CLI
         run: |
-          pip install safety
-          safety check
+          curl -s https://blackducksoftware.github.io/bridge-cli/install.sh | bash
+          echo "$HOME/bridge-cli" >> $GITHUB_PATH
 
-      # ✅ SAST scan (code issues)
-      - name: Run Bandit
+      # -----------------------------
+      # STEP 5: Run Polaris Scan (ONLY SECURITY STEP)
+      # -----------------------------
+      - name: Run Polaris Scan (Bridge CLI)
+        env:
+          BRIDGE_POLARIS_SERVER_URL: ${{ secrets.POLARIS_SERVER_URL }}
+          BRIDGE_POLARIS_ACCESS_TOKEN: ${{ secrets.POLARIS_ACCESS_TOKEN }}
         run: |
-          pip install bandit
-          bandit -r .
-
-      # ✅ Run app (for DAST later)
-      - name: Start app
-        run: |
-          python app.py &
-          sleep 5
-          
-      # ✅ NEW STEP: Install Node.js 24
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      # ✅ Optional DAST scan
-      - name: Run OWASP ZAP baseline
-        uses: zaproxy/action-baseline@v0.3.0
-        with:
-          target: 'http://localhost:5000'
+          bridge --stage polaris \
+            --polaris.project.name "vulnerable-demo" \
+            --polaris.application.name "vulnerable-demo-app" \
+            --detect.tools=SIGNATURE_SCAN \
+            --coverity.project.name "vulnerable-demo" \
+            --coverity.stream.name "main"
