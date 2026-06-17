@@ -1,0 +1,46 @@
+name: vulnerable-app-pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ✅ SCA scan (dependency vulnerabilities)
+      - name: Run Safety
+        run: |
+          pip install safety
+          safety check
+
+      # ✅ SAST scan (code issues)
+      - name: Run Bandit
+        run: |
+          pip install bandit
+          bandit -r .
+
+      # ✅ Run app (for DAST later)
+      - name: Start app
+        run: |
+          python app.py &
+          sleep 5
+
+      # ✅ Optional DAST scan
+      - name: Run OWASP ZAP baseline
+        uses: zaproxy/action-baseline@v0.3.0
+        with:
+          target: 'http://localhost:5000'
