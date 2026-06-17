@@ -45,7 +45,6 @@ jobs:
         with:
           node-version: '24'
 
-
       # ✅ Optional DAST scan
       - name: Run OWASP ZAP baseline
         uses: zaproxy/action-baseline@v0.3.0
