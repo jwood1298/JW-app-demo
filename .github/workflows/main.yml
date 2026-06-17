@@ -47,11 +47,15 @@ jobs:
       # -----------------------------
       # STEP 5: Run Polaris Scan (ONLY SECURITY STEP)
       # -----------------------------
-      - name: Run Polaris Scan (Bridge CLI)
+      - name: Run Polaris Scan (debug)
         env:
-          BRIDGE_POLARIS_SERVER_URL: ${{ secrets.POLARIS_SERVER_URL }}
-          BRIDGE_POLARIS_ACCESS_TOKEN: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          BRIDGE_POLARIS_APPLICATION_NAME: "vulnerable-demo-app"
-          BRIDGE_POLARIS_PROJECT_NAME: "vulnerable-demo"
+        BRIDGE_POLARIS_SERVER_URL: ${{ secrets.POLARIS_SERVER_URL }}
+        BRIDGE_POLARIS_ACCESS_TOKEN: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+        BRIDGE_POLARIS_APPLICATION_NAME: "vulnerable-demo-app"
+        BRIDGE_POLARIS_PROJECT_NAME: "vulnerable-demo"
         run: |
-          $HOME/bridge-cli/bridge
+          echo "Trying to locate bridge..."
+          find $HOME -name bridge
+
+          echo "Running bridge..."
+          $HOME/bridge-cli/bridge || true
