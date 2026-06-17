@@ -45,10 +45,7 @@ jobs:
         env:
           BRIDGE_POLARIS_SERVER_URL: ${{ secrets.POLARIS_SERVER_URL }}
           BRIDGE_POLARIS_ACCESS_TOKEN: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          BRIDGE_POLARIS_APPLICATION_NAME: "vulnerable-demo-app"
+          BRIDGE_POLARIS_PROJECT_NAME: "vulnerable-demo"
         run: |
-          bridge \
-            --polaris.project.name "vulnerable-demo" \
-            --polaris.application.name "vulnerable-demo-app" \
-            --detect.tools=SIGNATURE_SCAN \
-            --coverity.project.name "vulnerable-demo" \
-            --coverity.stream.name "main"
+          bridge
