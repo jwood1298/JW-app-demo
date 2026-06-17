@@ -35,8 +35,8 @@ jobs:
       # -----------------------------
       - name: Install Bridge CLI
         run: |
-          curl -s https://blackducksoftware.github.io/bridge-cli/install.sh | bash
-          echo "$HOME/bridge-cli" >> $GITHUB_PATH
+            curl -fsSL https://raw.githubusercontent.com/blackducksoftware/bridge-cli/main/install.sh | bash
+            echo "$HOME/bridge-cli" >> $GITHUB_PATH
 
       # -----------------------------
       # STEP 5: Run Polaris Scan (ONLY SECURITY STEP)
