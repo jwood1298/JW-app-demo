@@ -35,27 +35,23 @@ jobs:
       # -----------------------------
       - name: Install Bridge CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/blackducksoftware/bridge-cli/main/install.sh | bash
+          mkdir -p $HOME/bridge-cli
 
-          echo "Bridge CLI directory:"
-          ls -la $HOME
+          curl -fsSL https://raw.githubusercontent.com/blackducksoftware/bridge-cli/main/install.sh \
+          | bash -s -- -d $HOME/bridge-cli
 
           echo "Bridge CLI contents:"
-          ls -la $HOME/bridge-cli || true
-          ``
+          ls -la $HOME/bridge-cli
 
       # -----------------------------
       # STEP 5: Run Polaris Scan (ONLY SECURITY STEP)
       # -----------------------------
-      - name: Run Polaris Scan (debug)
+      - name: Run Polaris Scan (Bridge CLI)
         env:
           BRIDGE_POLARIS_SERVER_URL: ${{ secrets.POLARIS_SERVER_URL }}
           BRIDGE_POLARIS_ACCESS_TOKEN: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           BRIDGE_POLARIS_APPLICATION_NAME: "vulnerable-demo-app"
           BRIDGE_POLARIS_PROJECT_NAME: "vulnerable-demo"
-        run: |
-          echo "Trying to locate bridge..."
-          find $HOME -name bridge
+      run: |
+        $HOME/bridge-cli/bridge
 
-          echo "Running bridge..."
-          $HOME/bridge-cli/bridge || true
