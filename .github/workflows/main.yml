@@ -48,4 +48,4 @@ jobs:
           BRIDGE_POLARIS_APPLICATION_NAME: "vulnerable-demo-app"
           BRIDGE_POLARIS_PROJECT_NAME: "vulnerable-demo"
         run: |
-          bridge
+          $HOME/bridge-cli/bridge
