@@ -42,7 +42,7 @@ jobs:
 
           echo "Bridge CLI contents:"
           ls -la $HOME/bridge-cli || true
-``
+          ``
 
       # -----------------------------
       # STEP 5: Run Polaris Scan (ONLY SECURITY STEP)
