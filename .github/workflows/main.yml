@@ -9,7 +9,7 @@ jobs:
   build-and-scan:
     runs-on: ubuntu-latest
 
-    steps:
+  steps:
       # -----------------------------
       # STEP 1: Checkout code
       # -----------------------------
